@@ -1,13 +1,20 @@
 <?php
 
     # Function to identify the type of data from the file
-    Function fileTypeData($fileData)
+    Function fileTypeData($fileData,$firstFile)
     {
-        #New Array to save the data of the new files
-        $dataNameArray = [];
+        #Directory of the firstfile
+        $fileRealativeDir = dirname($firstFile);
+        echo $fileRealativeDir;
+
+        $fileRealName = basename($firstFile);
+        echo $fileRealName;
 
         #New Array to save the numbers to sum
         $dataNumberArray = [];
+
+        #New Array to save the data of the new files
+        $dataNameArray = [];
 
         #Loop to separate the values and push it into a new array
         foreach($fileData as $row => $data) {
@@ -19,17 +26,45 @@
                 array_push($dataNameArray, $data);
             }
         }  
-
-        print_r($dataNameArray);
-
+        #Test for Results
+        #print_r($dataNameArray);
         print_r($dataNumberArray);
+
+        #Sum of the number in the file
+        $totalFile[$fileRealName] = array_sum($dataNumberArray);
+
+        print_r($totalFile);
+
+        foreach($totalFile as $initialFile => $initialVal)
+        {
+            foreach($totalFile as $otherFile => $otherVal)
+            {
+                $initialVal =+ $otherVal;
+                $totalFile[$initialFile] = $initialVal;
+            }
+        }
+
+
+
+        #New Loop for the file name inside the original file
+        foreach($dataNameArray as $rowname => $fileName)
+        {
+            fileReader($fileRealativeDir. "/" . $fileName);
+        }
+
+
+    }
+
+    function anotherfileChecker()
+    {
+        fileTypeData($fileData);
     }
     #Function to read the first File
     function fileReader($firstFile)
     {
         # now we open the file and covert it into an Array
         $fileData = file($firstFile, FILE_IGNORE_NEW_LINES);
-        fileTypeData($fileData);
+        fileTypeData($fileData,$firstFile);
     }
 
     fileReader('A.txt');
