@@ -1,15 +1,15 @@
 <?php
-
+    $multiDimenArray = [];
     # Function to identify the type of data from the file
     Function fileTypeData($fileData,$firstFile)
     {
         #Directory of the firstfile
         $fileRealativeDir = dirname($firstFile);
-        echo $fileRealativeDir.'<br/>';
+        #echo $fileRealativeDir.'<br/>';
 
         #Name of the File
         $fileRealName = basename($firstFile);
-        echo $fileRealName.'<br/>';
+        #echo $fileRealName.'<br/>';
 
         #New Array to save the numbers to sum
         $dataNumberArray = [];
@@ -28,53 +28,61 @@
             }
         }  
         #Test for Results
-        #print_r($dataNameArray);
-        #print_r($dataNumberArray);
+        #print_r($dataNameArray)."<br />";
+        #print_r($dataNumberArray)."<br />";
 
-        #Sum of the number in the file
-        $totalFile[$fileRealName] = array_sum($dataNumberArray);
+        filenameChecker($dataNameArray,$fileRealativeDir);
 
-        #print_r($totalFile);
+        fileSum($dataNumberArray,$fileRealName);
 
-        /*foreach($totalFile as $initialFile => $initialVal)
-        {
-            foreach($totalFile as $otherFile => $otherVal)
-            {
-                $initialVal =+ $otherVal;
-                $totalFile[$initialFile] = $initialVal;
-            }
-        }}*/
 
-        $sumArray = array();
-
-foreach ($dataNumberArray as $k => $subArray) {
-    foreach ($subArray as $id => $value) {
-        $sumArray[$id]+=$value;
-        }
     }
 
-    print_r($sumArray);
+    function filenameChecker($dataNameArray,$fileRealativeDir){
+        #Checked there is not duplicated
+        array_unique($dataNameArray);
 
-        #New Loop for the file name inside the original file
+        #print_r($dataNameArray);
+
         foreach($dataNameArray as $rowname => $fileName)
         {
             fileReader($fileRealativeDir. "/" . $fileName);
         }
-
-
     }
 
-    function anotherfileChecker()
+    function fileSum($dataNumberArray,$fileRealName)
     {
-        fileTypeData($fileData);
-    }
+        $GLOBALS['multiDimenArray'][$fileRealName] = array_sum($dataNumberArray);
+        foreach($GLOBALS['multiDimenArray'] as $initialFile  => $initiaVal) {
+            foreach($GLOBALS['multiDimenArray'] as $otherFile => $otherVal) {
+                if (in_array($otherFile, file($initialFile, FILE_IGNORE_NEW_LINES))) {
+                    $initiaVal += $otherVal;
+                    $GLOBALS['multiDimenArray'][$initialFile] = $initiaVal;
+                }
+            }
     
+        }
+
+        #print_r($GLOBALS['multiDimenArray'][$initialFile]);
+    }
+
+    
+    function fileResult() {
+        foreach(array_reverse($GLOBALS['multiDimenArray']) as $initialFile => $initiaVal) {
+            echo "$initialFile - $initiaVal" . "<br>";
+        }
+    }
+
+
     #Function to read the first File
     function fileReader($firstFile)
     {
         # now we open the file and covert it into an Array
         $fileData = file($firstFile, FILE_IGNORE_NEW_LINES);
         fileTypeData($fileData,$firstFile);
+
+        fileResult();
+
     }
 
     fileReader('A.txt');
