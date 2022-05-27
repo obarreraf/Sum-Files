@@ -5,10 +5,11 @@
     {
         #Directory of the firstfile
         $fileRealativeDir = dirname($firstFile);
-        echo $fileRealativeDir;
+        echo $fileRealativeDir.'<br/>';
 
+        #Name of the File
         $fileRealName = basename($firstFile);
-        echo $fileRealName;
+        echo $fileRealName.'<br/>';
 
         #New Array to save the numbers to sum
         $dataNumberArray = [];
@@ -28,23 +29,31 @@
         }  
         #Test for Results
         #print_r($dataNameArray);
-        print_r($dataNumberArray);
+        #print_r($dataNumberArray);
 
         #Sum of the number in the file
         $totalFile[$fileRealName] = array_sum($dataNumberArray);
 
-        print_r($totalFile);
+        #print_r($totalFile);
 
-        foreach($totalFile as $initialFile => $initialVal)
+        /*foreach($totalFile as $initialFile => $initialVal)
         {
             foreach($totalFile as $otherFile => $otherVal)
             {
                 $initialVal =+ $otherVal;
                 $totalFile[$initialFile] = $initialVal;
             }
+        }}*/
+
+        $sumArray = array();
+
+foreach ($dataNumberArray as $k => $subArray) {
+    foreach ($subArray as $id => $value) {
+        $sumArray[$id]+=$value;
         }
+    }
 
-
+    print_r($sumArray);
 
         #New Loop for the file name inside the original file
         foreach($dataNameArray as $rowname => $fileName)
@@ -59,6 +68,7 @@
     {
         fileTypeData($fileData);
     }
+    
     #Function to read the first File
     function fileReader($firstFile)
     {
